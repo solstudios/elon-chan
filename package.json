@@ -1,0 +1,11 @@
+{
+  "name": "Elon-chan",
+  "version": "1.0.0",
+  "description": "Early Version of the point bot",
+  "main": "bot.js",
+  "author": "Comnyando#0042",
+  "dependencies": {
+    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+    "winston": "^3.1.0"
+  }
+}
