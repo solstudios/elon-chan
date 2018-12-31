@@ -1,7 +1,7 @@
 // elon-chan server bot
 
 const Discord = require('discord.js');
-var logger = require('winston');
+const logger = require('winston');
 const config = require('./config.json');
 
 const client = new Discord.Client();
