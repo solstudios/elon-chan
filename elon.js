@@ -51,9 +51,17 @@ client.on('message', function (user, userID, channelID, message, evt) {
         */
         if (!isNaN(points) && // if not undefined
           args.length == 4 &&
-          args[1] === "points" &&
-          (args[2] === "for" || args[2] === "to")
+          args[1] === 'points' &&
+          (args[2] === 'for' || args[2] === 'to')
         ) {
+          if (points <= 0) { // make sure points are given
+            client.sendMessage({
+              to: channelID,
+              message: `Error! Cannot give 0 or less points to a user`,
+            });
+            break;
+          }
+
           var reciever = args[3];
           client.sendMessage({
             to: channelID,
