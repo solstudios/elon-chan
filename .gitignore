@@ -82,3 +82,6 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 config.json
+.vs/VSWorkspaceState.json
+.vs/slnx.sqlite
+.vs/elon-chan/v15/.suo
