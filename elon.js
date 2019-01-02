@@ -87,9 +87,22 @@ client.on('message', msg => {
             }
 
             // TODO: save things to database
+            const recieverId = args[3];
+            // msg.guild.members.get()
+            logger.info(msg.guild);
+            const reciever = msg.guild.members.get(recieverId);
+
+            logger.info(`trying to give ${reciever} points`);
+
+            if (!reciever) {
+              logger.info(`${recieverId} does not exist, so points could not be given`);
+              msg.reply(`${recieverId} does not exist, so points could not be given`);
+              break;
+            }
+
             let score;
             // NOTE: The current code only attempts to store points for each individual user, no team implementation is in place
-            score = getScore.get(msg.author.id, msg.guild.id); // gets the current score for the user that sent the message
+            score = getScore.get(recieverId, msg.guild.id); // gets the current score for the user that sent the message
             if (!score) { // if that score doesn't exist, create a new user
                 score = { id: `${msg.guild.id}-${msg.author.id}`, user: msg.author.id, guild: msg.guild.id, points: 0 }
                 // TODO: add implementaion to ask the point assigner to set a team for the new User
@@ -98,7 +111,6 @@ client.on('message', msg => {
             setScore.run(score); // Set the user's score in the database to the new score
 
             // respond to user that points were given to a member
-            var reciever = args[3];
             logger.info(`pts: ${points}`);
             logger.info(`given to: ${reciever}`)
             msg.reply(`\npts: ${points} \nto: ${reciever}`);
