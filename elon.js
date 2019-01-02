@@ -94,7 +94,7 @@ client.on('message', msg => {
                 score = { id: `${msg.guild.id}-${msg.author.id}`, user: msg.author.id, guild: msg.guild.id, points: 0 }
                 // TODO: add implementaion to ask the point assigner to set a team for the new User
             }
-            score.points++; // add the points to the user's total
+            score.points += points // add the points to the user's total
             setScore.run(score); // Set the user's score in the database to the new score
 
             // respond to user that points were given to a member
