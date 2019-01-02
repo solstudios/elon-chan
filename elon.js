@@ -57,9 +57,30 @@ client.on('message', msg => {
           msg.reply('Pong!');
           break;
         case 'score': // Tells a user how many points they have
-          const userPoints = getScore.get(msg.author.id, msg.guild.id).points;
-          logger.info(`userpoints: ${userPoints}`);
-          msg.reply(`You currently have ${userPoints} points.`);
+		  if(args.length > 1) { // For when another user is mentioned
+			//parses the tagged user to get just the ID
+            let recieverId = args[1];
+            let oldName = args[1];
+            if (args[1].length >= 3) {
+               recieverId = args[3].substring(2, args[1].length - 1);
+            }
+			let rec = msg.guild.members.get(recieverId);
+			
+			if (!rec) {
+                logger.info(`${oldName} does not exist, so points could not be given`);
+                msg.reply(`${oldName} does not exist, so points could not be given`);
+              break;
+            }
+			
+			let uP = getScore.get(rec, msg.guild.id).points;
+			logger.info(`userpoints: ${uP}`);
+			msg.reply(`You currently have ${uP} points.`); 
+			
+		  } else { // For getting the points of the user themself
+			const userPoints = getScore.get(msg.author.id, msg.guild.id).points;
+			logger.info(`userpoints: ${userPoints}`);
+			msg.reply(`You currently have ${userPoints} points.`);  
+		  }
           break;
         default:
           // X points to/for Y
@@ -86,8 +107,9 @@ client.on('message', msg => {
               break;
             }
 
-            // TODO: save things to database
-              //parses the tagged user to get just the ID
+            //Start saving things to the Database
+			
+            //parses the tagged user to get just the ID
             let recieverId = args[3];
             let oldName = args[3];
             if (args[3].length >= 3) {
