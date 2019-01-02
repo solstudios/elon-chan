@@ -89,6 +89,7 @@ client.on('message', msg => {
             // TODO: save things to database
               //parses the tagged user to get just the ID
             let recieverId = args[3];
+            let oldName = args[3];
             if (args[3].length >= 3) {
                recieverId = args[3].substring(2, args[3].length - 1);
             }
@@ -99,8 +100,8 @@ client.on('message', msg => {
             logger.info(`trying to give ${reciever} points`);
 
             if (!reciever) {
-              logger.info(`${recieverId} does not exist, so points could not be given`);
-              msg.reply(`${recieverId} does not exist, so points could not be given`);
+                logger.info(`${oldName} does not exist, so points could not be given`);
+                msg.reply(`${oldName} does not exist, so points could not be given`);
               break;
             }
 
