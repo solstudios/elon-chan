@@ -87,7 +87,11 @@ client.on('message', msg => {
             }
 
             // TODO: save things to database
-            const recieverId = args[3];
+              //parses the tagged user to get just the ID
+            let recieverId = args[3];
+            if (args[3].length >= 3) {
+               recieverId = args[3].substring(2, args[3].length - 1);
+            }
             // msg.guild.members.get()
             logger.info(msg.guild);
             const reciever = msg.guild.members.get(recieverId);
