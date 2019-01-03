@@ -6,11 +6,13 @@ const config = require('./config.json');
 
 const client = new Discord.Client();
 
-//SQLite constants
+// SQLite
 const Database = require('better-sqlite3');
 const sql = new Database('scores.sqlite3', { readonly: false });
 
+// helpers
 const pointsTo = require('./helpers/pointsto').pointsTo;
+const scoreOf = require('./helpers/scoreof').scoreOf;
 let dbActions = {};
 
 // winston logger
@@ -48,41 +50,16 @@ client.on('ready', () => {
 client.on('message', msg => {
   if (msg.author.bot) return; // Makes sure the message is not from another bot
   if (!msg.guild) return; // These commands will only activate in a server and not in DMs
-
   if (msg.content.substring(0, 2) != config.prefix) return; // make sure message starts with prefix
 
   const args = msg.content.substring(2).split(' ');
-  const cmd = args[0];
 
-  switch(cmd) {
+  switch(args[0]) {
     case 'ping':
       msg.reply('Pong!');
       break;
     case 'score': // Tells a user how many points they have
-      if (args.length > 1) { // For when another user is mentioned
-        //parses the tagged user to get just the ID
-        let recieverId = args[1];
-        let oldName = args[1];
-        if (args[1].length >= 3) {
-          recieverId = args[3].substring(2, args[1].length - 1);
-        }
-        let rec = msg.guild.members.get(recieverId);
-
-        if (!rec) {
-          logger.info(`${oldName} does not exist, so points could not be given`);
-          msg.reply(`${oldName} does not exist, so points could not be given`);
-          break;
-        }
-
-        let uP = dbActions.getScore.get(rec, msg.guild.id).points;
-        logger.info(`userpoints: ${uP}`);
-        msg.reply(`You currently have ${uP} points.`);
-
-      } else { // For getting the points of the user themself
-        const userPoints = dbActions.getScore.get(msg.author.id, msg.guild.id).points;
-        logger.info(`userpoints: ${userPoints}`);
-        msg.reply(`You currently have ${userPoints} points.`);
-      }
+      scoreOf(args, msg, logger, dbActions);
       break;
     default:
       // check if query was in form "e!X points to Y"

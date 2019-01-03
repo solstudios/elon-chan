@@ -1,4 +1,5 @@
 const config = require('../config.json');
+const helpers = require('./helpers');
 
 exports.pointsTo = (args, msg, logger, dbActions) => {
   logger.info('checking points');
@@ -38,15 +39,11 @@ exports.pointsTo = (args, msg, logger, dbActions) => {
   //Start saving things to the Database
 
   //parses the tagged user to get just the ID
-  let recieverId = args[3];
-  let oldName = args[3];
-  if (args[3].length >= 3) {
-    recieverId = args[3].substring(2, args[3].length - 1);
-  }
-  // msg.guild.members.get()
-  logger.info(msg.guild);
+  const oldName = args[3];
+  const recieverId = helpers.idParse(oldName);
   const reciever = msg.guild.members.get(recieverId);
 
+  logger.info(msg.guild);
   logger.info(`trying to give "${reciever}" points`);
 
   if (!reciever) {
