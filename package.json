@@ -2,10 +2,10 @@
   "name": "Elon-chan",
   "version": "1.0.0",
   "description": "Early Version of the point bot",
-  "main": "elon.js",
-  "author": "Comnyando#0042",
+  "main": "index.js",
+  "author": ["Comnyando#0042", "incognito@6265"],
   "scripts": {
-    "start": "node elon.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "better-sqlite3": "^5.2.1",
