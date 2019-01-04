@@ -8,13 +8,13 @@ exports.pointsTo = (args, msg, logger, dbActions) => {
   if (args.length != 4) return;
 
   // X points to/for Y
-  const points = parseInt(args[1], 10);
+  const points = parseInt(args[0], 10);
   logger.info(`parsed points is ${points}`);
 
   if (!(
     !isNaN(points) && // if not undefined
     args.length == 4 && // command has 4 words
-    (args[0].toLowerCase() === 'points' || args[0].toLowerCase() === 'pts') && // proper words
+    (args[1].toLowerCase() === 'points' || args[1].toLowerCase() === 'pts') && // proper words
     (args[2].toLowerCase() === 'for' || args[2].toLowerCase() === 'to') // for or to
   )) {
     logger.info('query not correct');
@@ -55,15 +55,24 @@ exports.pointsTo = (args, msg, logger, dbActions) => {
   let score;
   // NOTE: The current code only attempts to store points for each individual user, no team implementation is in place
   score = dbActions.getScore.get(recieverId, msg.guild.id); // gets the current score for the user that sent the message
-  if (!score) { // if that score doesn't exist, create a new user
-    score = { id: `${msg.guild.id}-${msg.author.id}`, user: msg.author.id, guild: msg.guild.id, points: 0 }
-    // TODO: add implementaion to ask the point assigner to set a team for the new User
+
+  logger.info(`score for this person`);
+  console.log(score);
+  // if that score doesn't exist, create a new user with the proper amount of points
+  if (!score) {
+    logger.info(`create new user`);
+    helpers.newUser(dbActions, msg, recieverId, points);
+  } else { // otherwise, add points
+    score.points += points // add the points to the user's total
+    logger.info(`score for this person`);
+    logger.info(score);
+    dbActions.setScore.run(score); // Set the user's score in the database to the new score
   }
-  score.points += points // add the points to the user's total
-  dbActions.setScore.run(score); // Set the user's score in the database to the new score
+
+  const newscore = dbActions.getScore.get(recieverId, msg.guild.id); // gets the current score for the user that sent the message
 
   // respond to user that points were given to a member
   logger.info(`pts: ${points}`);
   logger.info(`given to: ${reciever}`)
-  msg.reply(`\npts: ${points} \nto: ${reciever}`);
+  msg.reply(`\npts: ${points} \nto: ${reciever} \ntotal: ${newscore.points}`);
 };

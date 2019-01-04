@@ -1,5 +1,6 @@
 {
-	"token": "TOKEN_DATA_GOES_HERE",
+	"token": "TOKEN_GOES_HERE",
 	"prefix":  "e!",
-	"role":  "Sensei"
+	"role": "Sensei",
+  "database": "scores.sqlite3"
 }

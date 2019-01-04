@@ -8,7 +8,7 @@ const client = new Discord.Client();
 
 // SQLite
 const Database = require('better-sqlite3');
-const sql = new Database('scores.sqlite3', { readonly: false });
+const sql = new Database(config.database, { readonly: false });
 
 // helpers
 const pointsTo = require('./helpers/pointsto').pointsTo;
