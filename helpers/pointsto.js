@@ -36,21 +36,35 @@ exports.pointsTo = (args, msg, logger, dbActions) => {
     return;
   }
 
-  //Start saving things to the Database
-
-  //parses the tagged user to get just the ID
+  // TODO
+  // Check if you are giving points to a role
+  // msg.guild.roles.find()
   const oldName = args[3];
-  const recieverId = helpers.idParse(oldName);
-  const reciever = msg.guild.members.get(recieverId);
+  let recieverId = null;
+  let reciever = null;
+  logger.info(oldName);
+  logger.info(oldName.substring(0,2));
+  logger.info(oldName.slice(-1));
+  if (helpers.isId(oldName)) { // is user id
+    logger.info(`trying to give a user id points`);
+    //parses the tagged user to get just the ID
+    recieverId = helpers.idParse(oldName);
+    reciever = msg.guild.members.get(recieverId);
 
-  logger.info(msg.guild);
-  logger.info(`trying to give "${reciever}" points`);
+    logger.info(msg.guild);
+    logger.info(`trying to give "${reciever}" points`);
 
-  if (!reciever) {
-    logger.info(`${oldName} does not exist, so points could not be given`);
-    msg.reply(`${oldName} does not exist, so points could not be given`);
+    if (!reciever) {
+      logger.info(`${oldName} does not exist, so points could not be given`);
+      msg.reply(`${oldName} does not exist, so points could not be given`);
+      return;
+    }
+  } else { //is role
+    logger.info(`trying to give a role points`);
+    // TODO: remove return
     return;
   }
+
 
   let score;
   // NOTE: The current code only attempts to store points for each individual user, no team implementation is in place

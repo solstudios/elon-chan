@@ -12,8 +12,15 @@ exports.newUser = (dbActions, msg, userId, points) => {
     id: `${msg.guild.id}-${userId}`,
     user: userId,
     guild: msg.guild.id,
-    points
+    points: points,
   }
   // TODO: add implementaion to ask the point assigner to set a team for the new User
   dbActions.setScore.run(user); // Set the user's score in the database to the new score
+}
+
+exports.isId = (idString) => {
+  return (
+    idString.substring(0,2) === "<@" &&
+    idString.slice(-1) === ">"
+  );
 }

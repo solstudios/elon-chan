@@ -41,9 +41,22 @@ client.on('ready', () => {
     sql.pragma("journal_mode = wal");
   }
 
+  const roletable = sql.prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'rolescores';").get();
+  if (!roletable['count(*)']) {
+    // If the table isn't there, create it and setup the database correctly.
+    sql.prepare("CREATE TABLE rolescores (id TEXT PRIMARY KEY, role TEXT, guild TEXT, points INTEGER);").run();
+    // Ensure that the "id" row is always unique and indexed.
+    sql.prepare("CREATE UNIQUE INDEX idx_rolescores_id ON rolescores (id);").run();
+    sql.pragma("synchronous = 1");
+    sql.pragma("journal_mode = wal");
+  }
+
   // And then we have two prepared statements to get and set the score data.
   dbActions.getScore = sql.prepare("SELECT * FROM scores WHERE user = ? AND guild = ?");
   dbActions.setScore = sql.prepare("INSERT OR REPLACE INTO scores (id, user, guild, points) VALUES (@id, @user, @guild, @points);");
+
+  dbActions.getRoleScore = sql.prepare("SELECT * FROM scores WHERE user = ? AND guild = ?");
+  dbActions.setRoleScore = sql.prepare("INSERT OR REPLACE INTO rolescores (id, role, guild, points) VALUES (@id, @role, @guild, @points);");
 });
 
 // messages watcher
