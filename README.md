@@ -20,6 +20,13 @@ Command to see points
 * e!score Y
     * display score for person
 
+set team roles (list in config.js)
+
+individual user 
+
+
+TODO: give roles with the bot
+
 ## debug
 
 * e!reset

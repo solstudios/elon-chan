@@ -23,11 +23,13 @@ exports.pointsTo = (args, msg, logger, dbActions) => {
 
   // ensure sender is authorized to give points
   const sender = msg.member;
-  if (!sender.roles.find(role => role.name === config.role)) {
+  if (!sender.roles.find(role => role.name === config.admin)) {
     logger.info(`${msg.user.tag} not authorized to give points`);
     msg.reply('you are not authorized to give points!');
     return;
   }
+
+  .indexOf(str) >= 0
 
   // ensure points given are greater than 0
   if (points <= 0) {
@@ -40,53 +42,53 @@ exports.pointsTo = (args, msg, logger, dbActions) => {
   // Check if you are giving points to a role
   // msg.guild.roles.find()
   const oldName = args[3];
-  let recieverId = null;
-  let reciever = null;
-  logger.info(oldName);
-  logger.info(oldName.substring(0,2));
-  logger.info(oldName.slice(-1));
+  let recieverTeam = null;
+
   if (helpers.isId(oldName)) { // is user id
-    logger.info(`trying to give a user id points`);
+    let reciever = null;
+    let recieverId = null;
+
     //parses the tagged user to get just the ID
     recieverId = helpers.idParse(oldName);
     reciever = msg.guild.members.get(recieverId);
 
     logger.info(msg.guild);
-    logger.info(`trying to give "${reciever}" points`);
+    logger.info(`trying to give user "${reciever}" points`);
 
     if (!reciever) {
       logger.info(`${oldName} does not exist, so points could not be given`);
       msg.reply(`${oldName} does not exist, so points could not be given`);
       return;
     }
-  } else { //is role
-    logger.info(`trying to give a role points`);
-    // TODO: remove return
-    return;
+
+    let score = helpers.addToUser(dbActions, msg, userId, points);
+
+    // respond to user that points were given to a member
+    logger.info(`pts: ${points}`);
+    logger.info(`given to: user ${reciever}`)
+    msg.reply(`\npts: ${points} \nto: ${reciever} \ntotal: ${newscore.points}`);
+
+    recieverTeam = helper.userHasRole(sender)
+
+  } else { // trying to give points only to a role or invalid
+    // if query is not for a user, it is a role or invalid
+    logger.info(`trying to give a role or other points`);
+
+    // check if points are trying to be given to a role
+    if (helper.isRole(oldName))
+      recieverTeam = oldName
   }
 
+  logger.info(`reciever's Team is ${recieverTeam}`);
 
-  let score;
-  // NOTE: The current code only attempts to store points for each individual user, no team implementation is in place
-  score = dbActions.getScore.get(recieverId, msg.guild.id); // gets the current score for the user that sent the message
+  // if has no team, then stop
+  if (!recieverTeam) return;
+  // otherwise add points to their team role
+  helpers.addToRole(dbActions, msg, recieverTeam, points);
 
-  logger.info(`score for this person`);
-  console.log(score);
-  // if that score doesn't exist, create a new user with the proper amount of points
-  if (!score) {
-    logger.info(`create new user`);
-    helpers.newUser(dbActions, msg, recieverId, points);
-  } else { // otherwise, add points
-    score.points += points // add the points to the user's total
-    logger.info(`score for this person`);
-    logger.info(score);
-    dbActions.setScore.run(score); // Set the user's score in the database to the new score
-  }
-
-  const newscore = dbActions.getScore.get(recieverId, msg.guild.id); // gets the current score for the user that sent the message
-
-  // respond to user that points were given to a member
+  // msg user that points ere given to role
   logger.info(`pts: ${points}`);
-  logger.info(`given to: ${reciever}`)
-  msg.reply(`\npts: ${points} \nto: ${reciever} \ntotal: ${newscore.points}`);
+  logger.info(`given to: role ${recieverTeam}`)
+  msg.reply(`\npts: ${points} \nto: ${recieverTeam} \ntotal: ${score}`);
+  return;
 };
