@@ -61,3 +61,37 @@ exports.isId = (idString) => {
     idString.slice(-1) === ">"
   );
 }
+
+
+//creates new Role in the database with X points, or, if that role already exists, adds the specified amount of points to that role
+exports.addToRole = (dbActions, msg, roleText, rolePoints) => {
+    // gets the current score for the role sent in the message
+    let roleItem = dbActions.getRoleScore.get(roleText, msg.guild.id);
+    let score = 0;
+
+    // if that role doesn't exist, create a new role with the proper amount of points
+    if(!roleItem){
+        roleItem = {
+            role: role,
+            guild: msg.guild.id,
+            points: points,
+        }
+        score = points;
+    } else { // otherwise, add points
+        user.points += points // add the points to the user's total
+        score = user.points;
+    }
+
+    dbActions.setRoleScore.run(roleItem); // Set the role's score in the database to the new score
+    return score;
+
+    // OLD CODE - Incog's method was better
+    //if the role is not already in the database, add it in with the correct number of points
+    //if (sql.prepare("SELECT COUNT(1) FROM rolescores WHERE key = " + roleText + ";").run() != 0) {
+    //    dbActions.setRoleScore.run(roleItem);
+    //} else {// If role exists, set the role's score in the database to the new points plus the old score.
+    //    roleItem.points = roleItem.points + dbActions.getRoleScore.get(roleText, msg.guild.id);
+    //    dbActions.setRoleScore.run(roleItem);
+    //}
+
+}
