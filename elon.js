@@ -55,7 +55,7 @@ client.on('ready', () => {
   dbActions.getScore = sql.prepare("SELECT * FROM scores WHERE user = ? AND guild = ?");
   dbActions.setScore = sql.prepare("INSERT OR REPLACE INTO scores (id, user, guild, points) VALUES (@id, @user, @guild, @points);");
 
-  dbActions.getRoleScore = sql.prepare("SELECT * FROM scores WHERE user = ? AND guild = ?");
+  dbActions.getRoleScore = sql.prepare("SELECT * FROM rolescores WHERE role = ? AND guild = ?");
   dbActions.setRoleScore = sql.prepare("INSERT OR REPLACE INTO rolescores (id, role, guild, points) VALUES (@id, @role, @guild, @points);");
 });
 

@@ -10,7 +10,7 @@ exports.userHasRole = (sender) => {
 }
 
 exports.isRole = (val) => {
-  config.roles.indexOf(val) >= 0
+  return config.roles.indexOf(val) >= 0;
 }
 
 exports.idParse = (idString) => {
@@ -22,7 +22,7 @@ exports.idParse = (idString) => {
 
 exports.addToUser = (dbActions, msg, userId, points) => {
   // gets the current score for the user that sent the message
-  let user = dbActions.getScore.get(recieverId, msg.guild.id);
+  let user = dbActions.getScore.get(userId, msg.guild.id);
   let score = 0;
 
   // if that user doesn't exist, create a new user with the proper amount of points
@@ -69,29 +69,22 @@ exports.addToRole = (dbActions, msg, roleText, rolePoints) => {
     let roleItem = dbActions.getRoleScore.get(roleText, msg.guild.id);
     let score = 0;
 
+    console.log(roleItem)
+
     // if that role doesn't exist, create a new role with the proper amount of points
     if(!roleItem){
         roleItem = {
-            role: role,
+            id: `${msg.guild.id}-${roleText}`,
+            role: roleText,
             guild: msg.guild.id,
-            points: points,
+            points: rolePoints,
         }
-        score = points;
+        score = rolePoints;
     } else { // otherwise, add points
-        user.points += points // add the points to the user's total
-        score = user.points;
+        roleItem.points += rolePoints // add the points to the user's total
+        score = roleItem.points;
     }
 
     dbActions.setRoleScore.run(roleItem); // Set the role's score in the database to the new score
     return score;
-
-    // OLD CODE - Incog's method was better
-    //if the role is not already in the database, add it in with the correct number of points
-    //if (sql.prepare("SELECT COUNT(1) FROM rolescores WHERE key = " + roleText + ";").run() != 0) {
-    //    dbActions.setRoleScore.run(roleItem);
-    //} else {// If role exists, set the role's score in the database to the new points plus the old score.
-    //    roleItem.points = roleItem.points + dbActions.getRoleScore.get(roleText, msg.guild.id);
-    //    dbActions.setRoleScore.run(roleItem);
-    //}
-
 }

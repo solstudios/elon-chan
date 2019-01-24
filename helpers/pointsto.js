@@ -29,8 +29,6 @@ exports.pointsTo = (args, msg, logger, dbActions) => {
     return;
   }
 
-  .indexOf(str) >= 0
-
   // ensure points given are greater than 0
   if (points <= 0) {
     logger.info(`${msg.user.tag} could not give <= 0 points`);
@@ -61,21 +59,22 @@ exports.pointsTo = (args, msg, logger, dbActions) => {
       return;
     }
 
-    let score = helpers.addToUser(dbActions, msg, userId, points);
+    let score = helpers.addToUser(dbActions, msg, recieverId, points);
 
     // respond to user that points were given to a member
     logger.info(`pts: ${points}`);
     logger.info(`given to: user ${reciever}`)
-    msg.reply(`\npts: ${points} \nto: ${reciever} \ntotal: ${newscore.points}`);
+    msg.reply(`\npts: ${points} \nto: ${reciever} \ntotal: ${score}`);
 
-    recieverTeam = helper.userHasRole(sender)
+    recieverTeam = helpers.userHasRole(sender)
 
   } else { // trying to give points only to a role or invalid
     // if query is not for a user, it is a role or invalid
     logger.info(`trying to give a role or other points`);
 
     // check if points are trying to be given to a role
-    if (helper.isRole(oldName))
+    logger.info(`the oldname ${oldName}`);
+    if (helpers.isRole(oldName))
       recieverTeam = oldName
   }
 
@@ -84,11 +83,11 @@ exports.pointsTo = (args, msg, logger, dbActions) => {
   // if has no team, then stop
   if (!recieverTeam) return;
   // otherwise add points to their team role
-  helpers.addToRole(dbActions, msg, recieverTeam, points);
+  let roleScore = helpers.addToRole(dbActions, msg, recieverTeam, points);
 
   // msg user that points ere given to role
   logger.info(`pts: ${points}`);
   logger.info(`given to: role ${recieverTeam}`)
-  msg.reply(`\npts: ${points} \nto: ${recieverTeam} \ntotal: ${score}`);
+  msg.reply(`\npts: ${points} \nto: ${recieverTeam} \ntotal: ${roleScore}`);
   return;
 };
