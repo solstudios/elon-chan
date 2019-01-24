@@ -1,6 +1,8 @@
 {
-	"token": "TOKEN_GOES_HERE",
+	"token": "[TOKEN GOES HERE]",
 	"prefix":  "e!",
-	"role": "Sensei",
+	"admin": "Sensei",
+  "roles": ["hufflepuff", "slytherin", "ravenclaw", "gryffindor"],
   "database": "scores.sqlite3"
 }
+
