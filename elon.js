@@ -13,6 +13,7 @@ const sql = new Database(config.database, { readonly: false });
 // helpers
 const pointsTo = require('./helpers/pointsto').pointsTo;
 const scoreOf = require('./helpers/scoreof').scoreOf;
+const help = require('./helpers/help').help;
 let dbActions = {};
 
 // winston logger
@@ -73,6 +74,9 @@ client.on('message', msg => {
       break;
     case 'score': // Tells a user how many points they have
       scoreOf(args, msg, logger, dbActions);
+      break;
+    case 'help':
+      help(args, msg);
       break;
     default:
       // check if query was in form "e!X points to Y"

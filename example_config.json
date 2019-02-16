@@ -1,0 +1,29 @@
+{
+	"token": "TOKEN GOES HERE",
+	"prefix":  "e!",
+	"admin": "Sensei",
+  "roles": ["hufflepuff", "slytherin", "ravenclaw", "gryffindor"],
+  "database": "scores.sqlite3",
+  "point_types": {
+    "keyframe": 30,
+    "background": 30,
+    "inbetween": 10,
+    "cleanup": 10,
+    "colouring": 10,
+    "promoart": 30,
+    "promogif": 40,
+    "charactersheet": 30,
+    "voiceline": 10,
+    "songrecording": 30,
+    "demotracksimple": 10,
+    "demotrackmedium": 30,
+    "demotrackcomplex": 50,
+    "streamparticipation": 5,
+    "videoeditsimple": 30,
+    "videoeditcomplex": 50,
+    "modlog": 10,
+    "critique": 5,
+    "paragraph": 5,
+    "other": 5
+  }
+}
