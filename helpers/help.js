@@ -41,5 +41,5 @@ exports.help = (args, msg) => {
     return;
   }
   // default case return helphelp
-  msg.reply(`\n${helpHelp}`);
+  msg.reply(`${helpHelp}`);
 }
