@@ -1,6 +1,9 @@
 # Config.json
 config.json
 
+# core, whatever this is
+core
+
 # sql
 *.sqlite3
 *.sqlite3-shm
