@@ -8,8 +8,9 @@
     "start": "node elon.js"
   },
   "dependencies": {
-    "better-sqlite3": "^5.2.1",
+    "better-sqlite3": "^5.4.0",
     "discord.js": "^11.4.2",
+    "integer": "^2.1.0",
     "node-gyp": "^3.8.0",
     "winston": "^3.1.0"
   }
