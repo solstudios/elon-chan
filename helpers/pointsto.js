@@ -29,14 +29,14 @@ exports.pointsTo = (args, msg, logger, dbActions) => {
   // ensure sender is authorized to give points
   const sender = msg.member;
   if (!sender.roles.find(role => role.name === config.admin)) {
-    logger.info(`${msg.user.tag} not authorized to give points`);
+    logger.info(`${sender} not authorized to give points`);
     msg.reply('you are not authorized to give points!');
     return;
   }
 
   // ensure points given are greater than 0
   if (points <= 0) {
-    logger.info(`${msg.user.tag} could not give <= 0 points`);
+    logger.info(`${sender} could not give <= 0 points`);
     msg.reply('you can\'t give 0 or less points to a user!');
     return;
   }
