@@ -10,7 +10,7 @@ exports.userHasRole = (sender) => {
 }
 
 exports.isRole = (val) => {
-  return config.roles.indexOf(val) >= 0;
+  return config.roles.indexOf(val.toLowerCase()) >= 0;
 }
 
 exports.idParse = (idString) => {

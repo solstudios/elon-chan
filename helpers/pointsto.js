@@ -8,7 +8,12 @@ exports.pointsTo = (args, msg, logger, dbActions) => {
   if (args.length != 4) return;
 
   // X points to/for Y
-  const points = parseInt(args[0], 10);
+  let points;
+  if (args[0] in config.point_types) {
+    points = config.point_types[args[0]]
+  } else {
+    points = parseInt(args[0], 10);
+  }
   logger.info(`parsed points is ${points}`);
 
   if (!(
