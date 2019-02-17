@@ -84,4 +84,6 @@ client.on('message', msg => {
   }
 });
 
+client.on('error', (error) => logger.log(error));
+
 client.login(config.token);
